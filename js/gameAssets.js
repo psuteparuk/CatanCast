@@ -1,3 +1,20 @@
 define([
-  'views/welcome'
+  'models/board',
+  'models/player',
+  'models/tile',
+  'models/property',
+  'models/settlement',
+  'models/city',
+  'models/road',
+  'models/port',
+  'models/token',
+  'collections/players',
+  'collections/playerAvatars',
+  'collections/tiles',
+  'collections/ports',
+  'collections/tokens',
+  'views/welcome',
+  'views/board',
+  'views/playerAvatar',
+  'views/playerAvatars'
 ], function() { return null; });

@@ -10,8 +10,7 @@ define([
   Game.Models = {};
   Game.Views = {};
   Game.Collections = {};
-  Game.connection = Connection;
-  Game.numPlayers = 0;
+  Game.players = null;
   Game.hasStarted = false;
   Game.$mainCanvas = null;
   Game.width = 0;
@@ -19,8 +18,12 @@ define([
   Game.stage = null;
   Game.renderer = null;
 
+  Game.welcomeView = null;
+  Game.board = null;
+  Game.boardView = null;
+
   Game.initialize = function() {
-    this.connection.connect();
+    Connection.connect();
     this.stage = new PIXI.Stage(0x000000);
 
     this.width = window.innerWidth;
@@ -31,6 +34,8 @@ define([
     this.$mainCanvas = $(this.renderer.view);
     this.$mainCanvas.addClass('game-canvas');
     document.body.appendChild(this.$mainCanvas.get(0));
+
+    this.players = new Game.Collections.Players();
   };
 
   Game.animate = function() {
@@ -45,29 +50,63 @@ define([
 
     console.log('Message received from ' + senderId);
     console.log('Content: ' + JSON.stringify(message));
+
+    switch(message.action) {
+      case 'playerJoin': // additional action to onPlayerJoined
+        var player = this.players.findWhere({ id: senderId });
+        player.setName(message.userName);
+        break;
+      case 'gameOptions':
+        this.clearWelcome();
+        this.stage.removeChildren();
+        this.renderMain(message.options || {});
+        break;
+      default:
+        break;
+    }
   };
 
   Game.onPlayerJoined = function(e) {
-    this.numPlayers++;
-
-    if (this.numPlayers === 1 && !this.hasStarted) {
+    var player = new Game.Models.Player({ id: e.senderId });
+    this.players.add(player);
+    var numPlayers = this.players.length;
+    if (numPlayers === 1 && !this.hasStarted) {
       this.hasStarted = true;
-      this.renderWelcome();
+      this.renderWelcome(player);
     }
   };
 
   Game.onPlayerLeft = function(e) {
-    this.numPlayers--;
+    var player = this.players.findWhere({ id: e.senderId });
+    this.players.remove(player);
   };
 
-  Game.renderWelcome = function() {
-    (new Game.Views.Welcome()).render();
+  Game.renderWelcome = function(player) {
+    this.welcomeView = new Game.Views.Welcome();
+    this.welcomeView.render(player);
+    setTimeout(this.clearWelcome, 10000);
+  };
+
+  Game.clearWelcome = function() {
+    if (!this.welcomeView) return;
+    this.welcomeView.clear();
+  }.bind(Game);
+
+  Game.renderMain = function(options) {
+    options = options || {};
+    this.board = new Game.Models.Board(options);
+    this.boardView = new Game.Views.Board({ model: this.board });
+    boardView.render();
   };
 
   /**************************************************/
 
   Game.Models.Base = Backbone.Model.extend({
     __name__: 'Game$Models$Base'
+  });
+
+  Game.Collections.Base = Backbone.Collection.extend({
+    __name__: 'Game$Collections$Base'
   });
 
   Game.Views.Base = Backbone.View.extend({
