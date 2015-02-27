@@ -8,9 +8,9 @@ define([
     __name__: "Game$Models$Token",
     super: Game.Models.Base.prototype,
 
-    initialize: function(options) {
-      options = options || {};
-      this.value = options.value;
+    initialize: function() {
+      this.value = 0;
+      this.hex = null;
     },
 
     getValue: function() {
@@ -19,6 +19,14 @@ define([
 
     setValue: function(value) {
       this.value = value;
+    },
+
+    getHex: function() {
+      return this.hex;
+    },
+
+    setHex: function(hex) {
+      this.hex = hex;
     }
   });
 

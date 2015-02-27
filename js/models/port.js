@@ -18,9 +18,6 @@ define([
         this.type = options.type;
       }
     }
-  }, { // Static
-    TYPE: ["2:1", "3:1"],
-    REVERSE_TYPE: { "2:1": 1, "3:1": 2 }
   });
 
   return Game.Models.Port;

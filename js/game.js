@@ -4,19 +4,25 @@ define([
   'backbone',
   'pixi',
   'tween',
-  'connection'
-], function($, _, Backbone, PIXI, TWEEN, Connection) {
+  'connection',
+  'gameConfig'
+], function($, _, Backbone, PIXI, TWEEN, Connection, Config) {
   Game = {};
   Game.Models = {};
   Game.Views = {};
   Game.Collections = {};
-  Game.players = null;
-  Game.hasStarted = false;
+
   Game.$mainCanvas = null;
   Game.width = 0;
   Game.height = 0;
   Game.stage = null;
   Game.renderer = null;
+
+  Game.config = {};
+  Game.players = null;
+  Game.hasStarted = false;
+  Game.resourceType = ['Desert', 'Lumber', 'Brick', 'Wool', 'Grain', 'Ore'];
+  Game.portType = ['2:1', '3:1'];
 
   Game.welcomeView = null;
   Game.board = null;
@@ -24,6 +30,7 @@ define([
 
   Game.initialize = function() {
     Connection.connect();
+    this.config = new Config();
     this.stage = new PIXI.Stage(0x000000);
 
     this.width = window.innerWidth;
@@ -57,12 +64,12 @@ define([
         player.setName(message.userName);
         break;
       case 'gameOptions':
+        this.config.init(message.options);
         this.clearWelcome();
         this.stage.removeChildren();
-        this.renderMain(message.options || {});
+        this.renderMain(message.options);
         break;
       default:
-        break;
     }
   };
 
@@ -92,11 +99,10 @@ define([
     this.welcomeView.clear();
   }.bind(Game);
 
-  Game.renderMain = function(options) {
-    options = options || {};
-    this.board = new Game.Models.Board(options);
+  Game.renderMain = function() {
+    this.board = new Game.Models.Board();
     this.boardView = new Game.Views.Board({ model: this.board });
-    boardView.render();
+    this.boardView.render();
   };
 
   /**************************************************/

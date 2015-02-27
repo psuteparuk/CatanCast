@@ -34,7 +34,7 @@ define([
     },
 
     addBgImage: function() {
-      var bgTexture = PIXI.Texture.fromImage('images/welcome_bg.jpg');
+      var bgTexture = PIXI.Texture.fromImage('images/welcome-bg.jpg');
       this.bg = new PIXI.Sprite(bgTexture);
       this.bg.position.set(0, 0);
       this.bg.width =  Game.width;
@@ -89,7 +89,7 @@ define([
     },
 
     addSheep: function(num) {
-      var sheepTexture = PIXI.Texture.fromImage('images/sheep_cartoon.png');
+      var sheepTexture = PIXI.Texture.fromImage('images/sheep-cartoon.png');
       var sheepObj = new PIXI.Sprite(sheepTexture);
       this.sheeps.push(sheepObj);
       var xOffset = num % 2 ? 200 : Game.width - 200;

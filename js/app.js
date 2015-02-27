@@ -7,7 +7,8 @@ define([
 ], function($, _, Backbone, Game, GameAssets) {
   var start = function() {
     Game.initialize();
-    Game.renderWelcome();
+    // Game.renderWelcome();
+    Game.renderMain();
     requestAnimationFrame(Game.animate);
 
     Backbone.history.start({ pushState: true });

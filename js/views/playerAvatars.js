@@ -6,7 +6,7 @@ define([
   'views/playerAvatar'
 ], function($, _, Backbone, Game) {
   Game.Views.PlayerAvatars = Game.Views.Base.extend({
-    __name__: 'Game$Views$PlayerAvatars',
+    __name__: "Game$Views$PlayerAvatars",
     super: Game.Views.Base.prototype,
 
     initialize: function() {
