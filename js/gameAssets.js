@@ -2,6 +2,8 @@ define([
   'models/board',
   'models/player',
   'models/hex',
+  'models/vertex',
+  'models/edge',
   'models/property',
   'models/settlement',
   'models/city',

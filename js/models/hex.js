@@ -47,6 +47,17 @@ define([
 
     freed: function() {
       this.isRobbed = false;
+    },
+
+    getVerticesQR: function() {
+      return [
+        { q: 2*this.q+this.r, r: this.q+2*this.r },
+        { q: 2*this.q+this.r, r: this.q+2*this.r+1 },
+        { q: 2*this.q+this.r+1, r: this.q+2*this.r+2 },
+        { q: 2*this.q+this.r+2, r: this.q+2*this.r+2 },
+        { q: 2*this.q+this.r+2, r: this.q+2*this.r+1 },
+        { q: 2*this.q+this.r+1, r: this.q+2*this.r }
+      ];
     }
   });
 
